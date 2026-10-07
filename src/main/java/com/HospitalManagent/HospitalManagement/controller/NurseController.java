@@ -23,6 +23,7 @@ public class NurseController {
 		nurses.add(new Nurse(3, "Sara", "sara", "pass"));
 		return nurses;
 	}
+	
  
 	@GetMapping("/login")
 	public ResponseEntity<Nurse> login(String user, String password) {
