@@ -3,6 +3,8 @@ package com.HospitalManagent.HospitalManagement.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,4 +23,17 @@ public class NurseController {
 		nurses.add(new Nurse(3, "Sara", "sara", "pass"));
 		return nurses;
 	}
+ 
+	@GetMapping("/login")
+	public ResponseEntity<Nurse> login(String user, String password) {
+		for (Nurse nurse : getAll()) {
+			if (nurse.getUser().equals(user) && nurse.getPassword().equals(password)) {
+				return ResponseEntity.ok(nurse);
+			}
+
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+	}
+
 }
