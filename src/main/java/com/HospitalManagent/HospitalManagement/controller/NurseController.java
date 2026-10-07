@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.HospitalManagent.HospitalManagement.model.Nurse;
 
 @RestController
+@RequestMapping("/nurses")
 public class NurseController {
 
-	@GetMapping("/nurses")
+	@GetMapping("/index")
 	public List<Nurse> getAll() {
 		List<Nurse> nurses = new ArrayList<>();
 		nurses.add(new Nurse(1, "Laura", "laura", "1234"));
