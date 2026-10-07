@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.HospitalManagent.HospitalManagement.model.Nurse;
 
@@ -21,4 +24,21 @@ public class NurseController {
 		nurses.add(new Nurse(3, "Sara", "sara", "pass"));
 		return nurses;
 	}
+
+	// buscar por nombre
+	@GetMapping("/name/{name}")
+	public Nurse findByName(@PathVariable String name) {
+		List<Nurse> nurses = getAll();
+
+		for (Nurse nurse : nurses) {
+			if (nurse.getName().equals(name)) {
+				return nurse;
+			}
+		}
+		return null;
+	}
+	
+	//Not found cuando el nombre no se encuentra
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+
 }
