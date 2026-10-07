@@ -1,0 +1,7 @@
+[
+  { "user": 1, "psw": "1234",   "name": "Maria",  "surname": "Garcia" },
+  { "user": 2, "psw": "abcd",   "name": "Laura",  "surname": "Lopez" },
+  { "user": 3, "psw": "pass1",  "name": "Carlos", "surname": "Martinez" },
+  { "user": 4, "psw": "qwerty", "name": "Ana",    "surname": "Sanchez" },
+  { "user": 5, "psw": "0000",   "name": "Maria",  "surname": "Fernandez" }
+]
