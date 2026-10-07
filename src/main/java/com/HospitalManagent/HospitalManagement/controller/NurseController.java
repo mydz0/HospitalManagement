@@ -25,6 +25,7 @@ public class NurseController {
 		return nurses;
 	}
 
+	
 	// buscar por nombre
 	@GetMapping("/name/{name}")
 	public Nurse findByName(@PathVariable String name) {
