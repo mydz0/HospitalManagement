@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.HospitalManagent.HospitalManagement.model.Nurse;
 
 @RestController
-@RequestMapping("/nurses")
+@RequestMapping("/nurse")
 public class NurseController {
 
 	@GetMapping("/index")
