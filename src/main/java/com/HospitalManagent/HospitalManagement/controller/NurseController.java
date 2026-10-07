@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.HospitalManagent.HospitalManagement.model.Nurse;
@@ -25,8 +26,18 @@ public class NurseController {
 		return nurses;
 	}
 
-	
-	
+	@GetMapping("/login")
+	public ResponseEntity<Nurse> login(String user, String password) {
+		for (Nurse nurse : getAll()) {
+			if (nurse.getUser().equals(user) && nurse.getPassword().equals(password)) {
+				return ResponseEntity.ok(nurse);
+			}
+
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+	}
+
 	// buscar por nombre
 	@GetMapping("/name/{name}")
 	public Nurse findByName(@PathVariable String name) {
@@ -39,8 +50,5 @@ public class NurseController {
 		}
 		return null;
 	}
-	
-	//Not found cuando el nombre no se encuentra
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
 
 }
