@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.HospitalManagent.HospitalManagement.model.Nurse;
 
+import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 @RestController
@@ -23,24 +24,20 @@ import tools.jackson.databind.ObjectMapper;
 public class NurseController {
 
 	@GetMapping("/index")
-	public List<Nurse> getAll() {
-		List<Nurse> nurses = new ArrayList<>();
+	public ResponseEntity<List<Nurse>> getAll() {
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			InputStream file = new ClassPathResource("nurses.json").getInputStream();
-			Nurse[] array = mapper.readValue(file, Nurse[].class);
-			for (Nurse nurse : array) {
-				nurses.add(nurse);
-			}
+			ClassPathResource resource = new ClassPathResource("nurses.json");
+			List<Nurse> nurses = new ObjectMapper().readValue(resource.getInputStream(), new TypeReference<List<Nurse>>() {});
+			return ResponseEntity.status(HttpStatus.OK).body(nurses);
 		} catch (IOException e) {
-			System.out.println("No se ha podido leer nurses.json");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
-		return nurses;
 	}
+	 
 
 	@GetMapping("/login")
 	public ResponseEntity<Nurse> login(String user, String password) {
-		for (Nurse nurse : getAll()) {
+		for (Nurse nurse : getAll().getBody()) {
 			if (nurse.getUser().equals(user) && nurse.getPassword().equals(password)) {
 				return ResponseEntity.ok(nurse);
 			}
@@ -53,7 +50,7 @@ public class NurseController {
 	// buscar por nombre
 	@GetMapping("/name/{name}")
 	public Nurse findByName(@PathVariable String name) {
-		List<Nurse> nurses = getAll();
+		List<Nurse> nurses = getAll().getBody();
 
 		for (Nurse nurse : nurses) {
 			if (nurse.getName().equals(name)) {
