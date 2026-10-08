@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.HospitalManagent.HospitalManagement.model.Nurse;
 
@@ -51,21 +50,18 @@ public class NurseController {
 	}
 
 	// buscar por nombre
-		@GetMapping("/name/{name}")
-		public ResponseEntity<List<Nurse>> findByName(@PathVariable String name) {		
-			List<Nurse> result = new ArrayList<>();
-
-			for (Nurse nurse : getAll().getBody()) {
-				if (nurse.getName().equals(name)) {
-					result.add(nurse);
-				}
+	@GetMapping("/name/{name}")
+	public ResponseEntity<List<Nurse>> findByName(@PathVariable String name) {
+		List<Nurse> result = new ArrayList<>();
+		for (Nurse nurse : getAll().getBody()) {
+			if (nurse.getName().equals(name)) {
+				result.add(nurse);
 			}
-			
-			if (result.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-			}
-			
-			return ResponseEntity.ok(result);
-
+		}
+		if (result.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(result);
 	}
 
+}

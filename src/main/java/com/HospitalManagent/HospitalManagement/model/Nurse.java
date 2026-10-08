@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Nurse {
 
 	private String user;
-	@JsonProperty("psw")
+	@JsonProperty(value = "psw", access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	private String name;
-	private String surname;
 
 	public Nurse() {
 	}
@@ -35,13 +34,5 @@ public class Nurse {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
 	}
 }
