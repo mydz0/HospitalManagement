@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,16 +37,17 @@ public class NurseController {
 	}
 	 
 
-	@GetMapping("/login")
-	public ResponseEntity<Nurse> login(String user, String password) {
-		for (Nurse nurse : getAll().getBody()) {
-			if (nurse.getUser().equals(user) && nurse.getPassword().equals(password)) {
-				return ResponseEntity.ok(nurse);
+	@PostMapping("/login")
+	public ResponseEntity<Nurse> login(@RequestBody Nurse login) {
+		List<Nurse> nurses = getAll().getBody();
+		if (nurses != null) {
+			for (Nurse nurse : nurses) {
+				if (nurse.getUser().equals(login.getUser()) && nurse.getPassword().equals(login.getPassword())) {
+					return ResponseEntity.ok(nurse);
+				}
 			}
-
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-
 	}
 
 	// buscar por nombre
