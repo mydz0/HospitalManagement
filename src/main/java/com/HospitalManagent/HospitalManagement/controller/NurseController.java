@@ -51,16 +51,21 @@ public class NurseController {
 	}
 
 	// buscar por nombre
-	@GetMapping("/name/{name}")
-	public Nurse findByName(@PathVariable String name) {
-		List<Nurse> nurses = getAll().getBody();
+		@GetMapping("/name/{name}")
+		public ResponseEntity<List<Nurse>> findByName(@PathVariable String name) {		
+			List<Nurse> result = new ArrayList<>();
 
-		for (Nurse nurse : nurses) {
-			if (nurse.getName().equals(name)) {
-				return nurse;
+			for (Nurse nurse : getAll().getBody()) {
+				if (nurse.getName().equals(name)) {
+					result.add(nurse);
+				}
 			}
-		}
-		return null;
+			
+			if (result.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+			
+			return ResponseEntity.ok(result);
+
 	}
 
-}
