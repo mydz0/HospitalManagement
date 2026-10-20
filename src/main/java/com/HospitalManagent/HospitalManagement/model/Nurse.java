@@ -1,12 +1,22 @@
 package com.HospitalManagent.HospitalManagement.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "nurse")
 public class Nurse {
 
+	@Id
+	@Column(name = "user", nullable = false)
 	private String user;
-	@JsonProperty(value = "psw", access = JsonProperty.Access.WRITE_ONLY)
+
+	@Column(name = "password", nullable = false)
 	private String password;
+
+	@Column(name = "name", nullable = false)
 	private String name;
 
 	public Nurse() {
