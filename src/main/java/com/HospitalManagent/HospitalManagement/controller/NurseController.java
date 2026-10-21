@@ -1,7 +1,5 @@
 package com.HospitalManagent.HospitalManagement.controller;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,28 +9,26 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.HospitalManagent.HospitalManagement.model.Nurse;
-
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
+import com.HospitalManagent.HospitalManagement.repository.NurseRepository;
 
 @RestController
 @RequestMapping("/nurse")
 public class NurseController {
 
+	// repositorio para acceder a la tabla nurse
+	@Autowired
+	private NurseRepository nurseRepository;
+
+	// saco todas las enfermeras de la base de datos
 	@GetMapping("/index")
 	public ResponseEntity<List<Nurse>> getAll() {
-		try {
-			ClassPathResource resource = new ClassPathResource("nurses.json");
-			List<Nurse> nurses = new ObjectMapper().readValue(resource.getInputStream(), new TypeReference<List<Nurse>>() {});
-			return ResponseEntity.status(HttpStatus.OK).body(nurses);
-		} catch (IOException e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		List<Nurse> nurses = (List<Nurse>) nurseRepository.findAll();
+		return ResponseEntity.status(HttpStatus.OK).body(nurses);
 	}
 	 
 
