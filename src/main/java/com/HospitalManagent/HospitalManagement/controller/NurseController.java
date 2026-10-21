@@ -46,7 +46,7 @@ public class NurseController {
 				}
 			}
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 	}
 
 	// buscar por nombre
