@@ -1,5 +1,7 @@
 package com.HospitalManagent.HospitalManagement.controller;
 
+import com.HospitalManagent.HospitalManagement.repository.NurseRepository;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,29 +26,30 @@ import tools.jackson.databind.ObjectMapper;
 @RestController
 @RequestMapping("/nurse")
 public class NurseController {
+	@Autowired
+	private NurseRepository nurseRepository;
 
 	@GetMapping("/index")
 	public ResponseEntity<List<Nurse>> getAll() {
 		try {
 			ClassPathResource resource = new ClassPathResource("nurses.json");
-			List<Nurse> nurses = new ObjectMapper().readValue(resource.getInputStream(), new TypeReference<List<Nurse>>() {});
+			List<Nurse> nurses = new ObjectMapper().readValue(resource.getInputStream(),
+					new TypeReference<List<Nurse>>() {
+					});
 			return ResponseEntity.status(HttpStatus.OK).body(nurses);
 		} catch (IOException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	 
 
 	@PostMapping("/login")
 	public ResponseEntity<Nurse> login(@RequestBody Nurse login) {
-		List<Nurse> nurses = getAll().getBody();
-		if (nurses != null) {
-			for (Nurse nurse : nurses) {
-				if (nurse.getUser().equals(login.getUser()) && nurse.getPassword().equals(login.getPassword())) {
-					return ResponseEntity.ok(nurse);
-				}
-			}
+		Nurse nurse = nurseRepository.findByUserAndPassword(login.getUser(), login.getPassword());
+
+		if (nurse != null) {
+			return ResponseEntity.ok(nurse);
 		}
+
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 	}
 
