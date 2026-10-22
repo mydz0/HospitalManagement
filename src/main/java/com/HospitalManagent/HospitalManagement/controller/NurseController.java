@@ -45,15 +45,16 @@ public class NurseController {
 	// buscar por nombre
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<Nurse>> findByName(@PathVariable String name) {
-		List<Nurse> result = new ArrayList<>();
-		for (Nurse nurse : getAll().getBody()) {
-			if (nurse.getName().equals(name)) {
-				result.add(nurse);
-			}
-		}
-		if (result.isEmpty()) {
+		
+		//Lo buscamos en la base de datos
+		List<Nurse> result = nurseRepository.findByName(name);
+		
+		if(result.isEmpty()) {
+			//que devuelva el not found 404 si esta vacia
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
+		
+		//si lo encuentra, devolvemos el correcto
 		return ResponseEntity.ok(result);
 	}
 
