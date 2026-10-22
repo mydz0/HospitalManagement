@@ -27,21 +27,18 @@ public class NurseController {
 	// saco todas las enfermeras de la base de datos
 	@GetMapping("/index")
 	public ResponseEntity<List<Nurse>> getAll() {
-		List<Nurse> nurses = (List<Nurse>) nurseRepository.findAll();
+		List<Nurse> nurses = nurseRepository.findAll();
 		return ResponseEntity.status(HttpStatus.OK).body(nurses);
 	}
-	 
 
 	@PostMapping("/login")
 	public ResponseEntity<Nurse> login(@RequestBody Nurse login) {
-		List<Nurse> nurses = getAll().getBody();
-		if (nurses != null) {
-			for (Nurse nurse : nurses) {
-				if (nurse.getUser().equals(login.getUser()) && nurse.getPassword().equals(login.getPassword())) {
-					return ResponseEntity.ok(nurse);
-				}
-			}
+		Nurse nurse = nurseRepository.findByUserAndPassword(login.getUser(), login.getPassword());
+
+		if (nurse != null) {
+			return ResponseEntity.ok(nurse);
 		}
+
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 	}
 
