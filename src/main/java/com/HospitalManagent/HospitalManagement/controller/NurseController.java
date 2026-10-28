@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import com.HospitalManagent.HospitalManagement.model.Nurse;
 import com.HospitalManagent.HospitalManagement.repository.NurseRepository;
@@ -80,6 +81,7 @@ public class NurseController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 	}
 
+	
 	// buscar una enfermera por su id (el id es el user)
 	@GetMapping("/{id}")
 	public ResponseEntity<Nurse> findById(@PathVariable String id) {
@@ -94,6 +96,35 @@ public class NurseController {
 
 		// si existe la devuelvo con 200
 		return ResponseEntity.ok(nurse.get());
+	}
+	
+	//buscamos enfermera por ID 
+	@PutMapping("/{id}")
+	public ResponseEntity<Nurse> update(
+			@PathVariable String id,
+			@RequestBody Nurse nurse) {
+
+		// 404 si no existe 
+		Optional<Nurse> existingNurse = nurseRepository.findById(id);
+
+		if (existingNurse.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+
+		// 400 faltan datos o datos incorrectos 
+		if (nurse.getUser() == null || nurse.getUser().isBlank()
+				|| nurse.getPassword() == null || nurse.getPassword().isBlank()
+				|| nurse.getName() == null || nurse.getName().isBlank()
+				|| !id.equals(nurse.getUser())) 
+		{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+
+		// actualizar enfermera y guardar los cambios 
+		Nurse updatedNurse = nurseRepository.save(nurse);
+
+		// 200 si se pudieron actualizar 
+		return ResponseEntity.ok(updatedNurse);
 	}
 
 }
