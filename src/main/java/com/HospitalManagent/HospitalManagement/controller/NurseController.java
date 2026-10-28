@@ -59,6 +59,27 @@ public class NurseController {
 		return ResponseEntity.ok(result);
 	}
 
+	// C - create a new nurse (201 OK, 400 KO)
+	@PostMapping("/create")
+	public ResponseEntity<Nurse> create(@RequestBody Nurse nurse) {
+
+		// KO (400): a required field is missing
+		if (nurse.getUser() == null || nurse.getUser().isBlank()
+				|| nurse.getPassword() == null || nurse.getPassword().isBlank()
+				|| nurse.getName() == null || nurse.getName().isBlank()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+
+		// KO (400): the user is the primary key and it already exists
+		if (nurseRepository.existsById(nurse.getUser())) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+
+		// OK (201): the nurse is saved and returned
+		Nurse saved = nurseRepository.save(nurse);
+		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+	}
+
 	// buscar una enfermera por su id (el id es el user)
 	@GetMapping("/{id}")
 	public ResponseEntity<Nurse> findById(@PathVariable String id) {
