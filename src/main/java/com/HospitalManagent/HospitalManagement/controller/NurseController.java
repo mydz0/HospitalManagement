@@ -93,6 +93,7 @@ public class NurseController {
 
 		nurseRepository.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(nurse);
+	}
 	
 	// buscar una enfermera por su id (el id es el user)
 	@GetMapping("/{id}")
