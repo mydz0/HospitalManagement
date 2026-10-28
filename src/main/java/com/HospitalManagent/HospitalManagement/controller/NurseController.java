@@ -2,6 +2,7 @@ package com.HospitalManagent.HospitalManagement.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,6 +78,22 @@ public class NurseController {
 		// OK (201): the nurse is saved and returned
 		Nurse saved = nurseRepository.save(nurse);
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+	}
+
+	// buscar una enfermera por su id (el id es el user)
+	@GetMapping("/{id}")
+	public ResponseEntity<Nurse> findById(@PathVariable String id) {
+
+		// la busco en la base de datos, puede que no exista
+		Optional<Nurse> nurse = nurseRepository.findById(id);
+
+		if (nurse.isEmpty()) {
+			// si no existe devuelvo 404
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+
+		// si existe la devuelvo con 200
+		return ResponseEntity.ok(nurse.get());
 	}
 
 }
