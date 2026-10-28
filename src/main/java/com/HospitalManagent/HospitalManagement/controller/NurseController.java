@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,16 +48,16 @@ public class NurseController {
 	// buscar por nombre
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<Nurse>> findByName(@PathVariable String name) {
-		
-		//Lo buscamos en la base de datos
+
+		// Lo buscamos en la base de datos
 		List<Nurse> result = nurseRepository.findByName(name);
-		
-		if(result.isEmpty()) {
-			//que devuelva el not found 404 si esta vacia
+
+		if (result.isEmpty()) {
+			// que devuelva el not found 404 si esta vacia
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
-		
-		//si lo encuentra, devolvemos el correcto
+
+		// si lo encuentra, devolvemos el correcto
 		return ResponseEntity.ok(result);
 	}
 
@@ -65,9 +66,8 @@ public class NurseController {
 	public ResponseEntity<Nurse> create(@RequestBody Nurse nurse) {
 
 		// KO (400): a required field is missing
-		if (nurse.getUser() == null || nurse.getUser().isBlank()
-				|| nurse.getPassword() == null || nurse.getPassword().isBlank()
-				|| nurse.getName() == null || nurse.getName().isBlank()) {
+		if (nurse.getUser() == null || nurse.getUser().isBlank() || nurse.getPassword() == null
+				|| nurse.getPassword().isBlank() || nurse.getName() == null || nurse.getName().isBlank()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 
@@ -81,6 +81,18 @@ public class NurseController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 	}
 
+	// Eliminar enfermeras por ID
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Nurse> delete(@PathVariable String id) {
+		// Si no existe devolvera un error 404: NotFound
+		if (!nurseRepository.existsById(id)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		// Busca la enfermera en la BBDD y la guarda en una variable
+		Nurse nurse = nurseRepository.findById(id).get();
+
+		nurseRepository.deleteById(id);
+		return ResponseEntity.status(HttpStatus.OK).body(nurse);
 	
 	// buscar una enfermera por su id (el id es el user)
 	@GetMapping("/{id}")
