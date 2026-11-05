@@ -41,8 +41,11 @@ public class NurseController {
 		if (nurse != null) {
 			return ResponseEntity.ok(nurse);
 		}
-
+		
+		
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+
 	}
 
 	// buscar por nombre
@@ -94,7 +97,7 @@ public class NurseController {
 		nurseRepository.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(nurse);
 	}
-	
+
 	// buscar una enfermera por su id (el id es el user)
 	@GetMapping("/{id}")
 	public ResponseEntity<Nurse> findById(@PathVariable String id) {
@@ -110,33 +113,29 @@ public class NurseController {
 		// si existe la devuelvo con 200
 		return ResponseEntity.ok(nurse.get());
 	}
-	
-	//buscamos enfermera por ID 
-	@PutMapping("/{id}")
-	public ResponseEntity<Nurse> update(
-			@PathVariable String id,
-			@RequestBody Nurse nurse) {
 
-		// 404 si no existe 
+	// buscamos enfermera por ID
+	@PutMapping("/{id}")
+	public ResponseEntity<Nurse> update(@PathVariable String id, @RequestBody Nurse nurse) {
+
+		// 404 si no existe
 		Optional<Nurse> existingNurse = nurseRepository.findById(id);
 
 		if (existingNurse.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 
-		// 400 faltan datos o datos incorrectos 
-		if (nurse.getUser() == null || nurse.getUser().isBlank()
-				|| nurse.getPassword() == null || nurse.getPassword().isBlank()
-				|| nurse.getName() == null || nurse.getName().isBlank()
-				|| !id.equals(nurse.getUser())) 
-		{
+		// 400 faltan datos o datos incorrectos
+		if (nurse.getUser() == null || nurse.getUser().isBlank() || nurse.getPassword() == null
+				|| nurse.getPassword().isBlank() || nurse.getName() == null || nurse.getName().isBlank()
+				|| !id.equals(nurse.getUser())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 
-		// actualizar enfermera y guardar los cambios 
+		// actualizar enfermera y guardar los cambios
 		Nurse updatedNurse = nurseRepository.save(nurse);
 
-		// 200 si se pudieron actualizar 
+		// 200 si se pudieron actualizar
 		return ResponseEntity.ok(updatedNurse);
 	}
 
