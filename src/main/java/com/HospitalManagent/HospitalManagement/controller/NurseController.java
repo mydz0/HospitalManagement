@@ -34,7 +34,7 @@ public class NurseController {
 		return ResponseEntity.status(HttpStatus.OK).body(nurses);
 	}
 
-	@PostMapping("/logifn")
+	@PostMapping("/login")  
 	public ResponseEntity<Nurse> login(@RequestBody Nurse login) {
 		Nurse nurse = nurseRepository.findByUserAndPassword(login.getUser(), login.getPassword());
 
